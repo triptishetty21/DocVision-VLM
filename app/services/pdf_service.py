@@ -1,7 +1,6 @@
 from pathlib import Path
 import fitz
 
-
 def pdf_to_images(pdf_path: str) -> list[str]:
     pdf = fitz.open(pdf_path)
 
