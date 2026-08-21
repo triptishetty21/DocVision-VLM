@@ -1,7 +1,6 @@
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.models import PointStruct
-from qdrant_client.models import Filter
 
 client = QdrantClient(":memory:")
 
@@ -13,8 +12,8 @@ client.recreate_collection(
     ),
 )
 
-def store_embeddings(chunks, embeddings):
 
+def store_embeddings(chunks, embeddings):
     points = []
 
     for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
@@ -33,12 +32,13 @@ def store_embeddings(chunks, embeddings):
         points=points
     )
 
-def search(query_embedding, limit=3):
 
-    results = client.search(
+def search(query_embedding, limit=3):
+    results = client.query_points(
         collection_name="documents",
-        query_vector=query_embedding,
+        query=query_embedding,
         limit=limit,
+        with_payload=True,
     )
 
-    return results
+    return results.points
