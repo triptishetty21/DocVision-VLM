@@ -2,12 +2,12 @@ from app.services.embedding_service import generate_embeddings
 from app.services.vector_service import search
 
 
-def retrieve_relevant_chunks(query: str, top_k: int = 3):
-    query_embedding = generate_embeddings([query])[0]
+def retrieve_relevant_chunks(question: str, limit: int = 3):
+    query_embedding = generate_embeddings([question])[0]
 
     results = search(
-        query_embedding=query_embedding,
-        limit=top_k
+        query_embedding,
+        limit=limit
     )
 
-    return results
+    return [result.payload["text"] for result in results]

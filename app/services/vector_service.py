@@ -2,15 +2,16 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.models import PointStruct
 
-client = QdrantClient(":memory:")
+client = QdrantClient(path="data/qdrant")
 
-client.recreate_collection(
-    collection_name="documents",
-    vectors_config=VectorParams(
-        size=384,
-        distance=Distance.COSINE,
-    ),
-)
+if not client.collection_exists("documents"):
+    client.create_collection(
+        collection_name="documents",
+        vectors_config=VectorParams(
+            size=384,
+            distance=Distance.COSINE,
+        ),
+    )
 
 
 def store_embeddings(chunks, embeddings):
